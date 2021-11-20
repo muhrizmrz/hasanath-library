@@ -16,4 +16,10 @@ adminRouter.get('/api/view-classification',(req,res)=>{
     })
 })
 
+adminRouter.get('/api/search-classification',(req,res)=>{
+    classificationHelper.searchClassification(req.query.keyword).then((result)=>{
+        res.json(result)
+    })
+})
+
 module.exports = adminRouter

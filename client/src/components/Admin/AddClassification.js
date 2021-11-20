@@ -1,14 +1,20 @@
 import React, { useState } from 'react'
 import SuccessfullMsg from './SuccessfullMsg'
 import '../../styles/output.css'
+import ErrorMsg from './ErrorMsg'
+//import Rolling  from ''
 const axios = require('axios')
 
 function AddClassification() {
     const [classificationNumber, setClassificationNumber] = useState()
     const [classificationName, setClassificationName] = useState()
     const [success, setSuccess] = useState()
+    const [error,setError] = useState()
     const [valueZero, setValueZero] = useState()
+    const [loading,setLoading] = useState()
     const handleSubmit = (e) => {
+        setError(false)
+        setLoading(true)
         e.preventDefault()
         const headers = {
             "Content-Type": "application/json"
@@ -17,11 +23,18 @@ function AddClassification() {
             classification_number: classificationNumber,
             classification_name: classificationName
         }, headers).then((response) => {
-            setSuccess(true)
+            setLoading(false)
+            if(!response.error){
+                setSuccess(true)
             setTimeout(() => {
                 setSuccess(false) 
             }, 4000);
-            setValueZero(true)   
+            } else {
+                setError(true)
+            }
+            
+            setClassificationName('')
+            setClassificationNumber('')  
             console.log(response)
         }).catch(function (error) {
             console.log(error);
@@ -43,11 +56,14 @@ function AddClassification() {
                             <label for="classification-name" class="font-bold text-lg text-gray-500">Classification Name</label>
                             <input type="text" value={valueZero?"":classificationName} onChange={(e) => setClassificationName(e.target.value)} id="classification-name" name="classification_name" placeholder="Classification Name" class="text-gray-700 p-2 bg-gray-200 rounded border-gray-300 focus:outline-none focus:bg-blue-100" />
                         </div>
-                        <button type="submit" class="p-2 rounded-lg bg-blue-900 text-white w-1/4 hover:bg-blue-800 justify-self-end col-span-2 mt-3">Save</button>
+                        <button type="submit" class="p-2 rounded-lg bg-blue-900 text-white w-1/4 hover:bg-blue-800 justify-self-end col-span-2 mt-3">
+                            <p><span>Save</span> <span><svg class="animate-spin h-5 w-5 mr-3 ..." viewBox="0 0 24 24"></svg></span></p>
+                        </button>
                     </form>
                 </div>
             </div>
             {success?<SuccessfullMsg />:""}
+            {error?<ErrorMsg/>:""}
         </div>
     )
 }

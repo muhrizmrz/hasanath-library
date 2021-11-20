@@ -3,11 +3,24 @@ const axios = require('axios')
 
 function ViewClassification() {
     const [collections, setCollections] = useState([])
+    const [classSummary,setClassSummary] = useState('')
     useEffect(() => {
         axios.get('/admin/api/view-classification').then(response => {
+            //console.log(response.data)
             setCollections(response.data)
         })
     })
+   /* function summaryClasses(summary){
+        var classSummary = ''
+        if(summary === "first summary"){
+            classSummary = "bg-blue-500"
+            return classSummary
+        }else{
+            classSummary = ''
+            return classSummary
+        }
+    }*/
+    
     return (
         <div className="mx-auto bg-gray-100 p-2 pb-20 ">
             <div className="w-75 mx-auto">
@@ -23,10 +36,11 @@ function ViewClassification() {
                         </tr>
                     </thead>
                     <tbody className="bg-white divide-y divide-gray-200">
-                        {
+                        { collections &&
                             collections.map((classification) => {
+                                
                                 return( 
-                                <tr>
+                                <tr className={classSummary}>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <div className="flex items-center">
                                             <div className="ml-4">
@@ -42,6 +56,7 @@ function ViewClassification() {
                                 </tr>
                                  )
                             })
+                            
                         }
                     </tbody>
                 </table>

@@ -9,17 +9,20 @@ import ViewClassificationPage from './Pages/Admin/ViewClassification';
 import Search from './contexts/searchClassificationContext';
 //import SearchClassification from './Pages/Admin/SearchClassification';
 import SearchClassificationPage from './Pages/Admin/SearchClassification';
+import viewChildClassifications from './contexts/viewChildClassifications';
 
 function App() {
   return (
-    <div>
+    <div className="bg-gray-50 h-screen">
           <Search>
+            <viewChildClassifications>
             <Routes>
           <Route path="/admin" element={<Home/>}/>
           <Route path="/admin/add-classification" element={<ClassificationList/>}/>
           <Route path='/admin/view-classification' element={<ViewClassificationPage/>}/>
           <Route path='/admin/search-classification' element={<SearchClassificationPage/>}/>
           </Routes>
+          </viewChildClassifications>
           </Search>
     </div>     
   );

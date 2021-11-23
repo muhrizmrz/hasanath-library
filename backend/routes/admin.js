@@ -22,4 +22,9 @@ adminRouter.get('/api/search-classification',(req,res)=>{
     })
 })
 
+adminRouter.get('/api/view-child-classifications',(req,res)=>{
+    classificationHelper.searchChildClassifications(req.query.classification_number).then((result)=>{
+        res.json(result)
+    })
+})
 module.exports = adminRouter

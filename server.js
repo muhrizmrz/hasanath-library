@@ -2,11 +2,14 @@ const express = require('express');
 const cors = require('cors');
 const { application } = require('express');
 const db = require('./backend/config/connection')
+const bodyParser = require('body-parser')
 var adminRouter = require('./backend/routes/admin');
 var usersRouter = require('./backend/routes/user');
 
 const app = express();
 app.use(express.json())
+app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.json())
 app.use('/admin', adminRouter);
 app.use('/', usersRouter);
 

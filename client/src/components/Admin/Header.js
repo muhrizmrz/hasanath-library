@@ -12,6 +12,8 @@ function Header() {
     const { searchLoading, setSearchLoading, setSearchClassificationResult, searchClassificationResult, setSearchText, searchText } = useContext(SearchContext)
     const navigate = useNavigate()
     const handleSearch = (e) => {
+        console.log(keyword)
+        setSearchText(keyword)
         setSearchLoading(true)
         e.preventDefault()
         axios.get('/admin/api/search-classification', {
@@ -20,7 +22,6 @@ function Header() {
             setSearchLoading(false)
             setKeyword('')
             navigate('/admin/search-classification')
-            setSearchText(keyword)
             setSearchClassificationResult(response.data)
         });
     }
@@ -30,11 +31,11 @@ function Header() {
                 <header className="w-100 p-4 px-16 bg-white h-auto shadow-lg">
                     <div className="grid grid-cols-4 justify-between place-content-center">
                         <div>
-                            <h1 className="text-lg font-bold">Title</h1>
+                            <h1 className="text-lg font-bold">Hasanath Library</h1>
                         </div>
                         <form className="col-span-2 flex" onSubmit={(e) => handleSearch(e)}>
-                            <input type='text' onChange={(e) => setKeyword(e.target.value)} placeholder='Search' className='py-1 px-3 bg-white rounded w-3/4 border border-transparent focus:outline-none ring-2 ring-blue-400 shadow-lg focus:ring-blue-500 text-gray-500' />
-                            <input type="submit" className="ml-4 p-1 px-6 rounded bg-blue-600 text-white" value="Search" />
+                            <input type='text' onChange={(e)=>setKeyword(e.target.value)} placeholder='Search' className='py-1 px-3 bg-white rounded w-3/4 border border-transparent focus:outline-none ring-2 ring-blue-400 shadow-lg focus:ring-blue-500 text-gray-500' />
+                            <input type="submit" className="ml-4 p-1 px-6 rounded text-white" style={{ backgroundColor: "#40514E" }} value="Search" />
                         </form>
 
 
@@ -46,7 +47,7 @@ function Header() {
                 </header>
 
             </div>
-    
+
             {searchLoading && <Loading />}
         </div>
     )

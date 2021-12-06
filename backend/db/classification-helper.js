@@ -6,15 +6,29 @@ module.exports = {
     addClassification: (classification_number, classification_name) => {
         return new Promise(async (resolve, reject) => {
             const isAvailable = await db.get().collection('classification').findOne({ classificationNumber: Number(classification_number) })
+            //console.log(Number(classification_number))
             if (!isAvailable) {
-                if (classification_number.length > 3) {
+                if(classification_number.length == 6){
                     var firstSummary = classification_number.charAt(0) + '00'
-                    firstSummary = parseInt(firstSummary, 10)
                     var secondSummary = classification_number.charAt(0) + classification_number.charAt(1) + '0'
-                    secondSummary = parseInt(secondSummary, 10)
                     var thirdSummary = classification_number.substring(0, 3)
-                    thirdSummary = parseInt(thirdSummary, 10)
-                    classification_number = Number(classification_number)
+                    var decimalSummary = classification_number.substring(0,5)
+                    db.get().collection('classification').insertOne({
+                        classificationNumber: classification_number,
+                        classificationName: classification_name,
+                        firstSummary: firstSummary,
+                        secondSummary: secondSummary,
+                        thirdSummary: thirdSummary,
+                        decimalSummary: decimalSummary,
+                        summary: "double decimal summary"
+                    }).then((result) => {
+                        console.log("added")
+                        resolve("double decimal summary added")
+                    })
+                }else if (classification_number.length > 3) {
+                    var firstSummary = classification_number.charAt(0) + '00'
+                    var secondSummary = classification_number.charAt(0) + classification_number.charAt(1) + '0'
+                    var thirdSummary = classification_number.substring(0, 3)
                     db.get().collection('classification').insertOne({
                         classificationNumber: classification_number,
                         classificationName: classification_name,
@@ -25,9 +39,8 @@ module.exports = {
                     }).then((result) => {
                         resolve("decimal summary added")
                     })
-                } else {
+                } else  {
                     if (classification_number.charAt(2) == '0' && classification_number.charAt(1) == '0') {
-                        classification_number = Number(classification_number)
                         db.get().collection('classification').insertOne({
                             classificationNumber: classification_number,
                             classificationName: classification_name,
@@ -37,8 +50,6 @@ module.exports = {
                         })
                     } else if (classification_number.charAt(2) == 0) {
                         var firstSummary = classification_number.charAt(0) + '00'
-                        firstSummary = parseInt(firstSummary, 10)
-                        classification_number = Number(classification_number)
                         db.get().collection('classification').insertOne({
                             classificationNumber: classification_number,
                             classificationName: classification_name,
@@ -49,12 +60,7 @@ module.exports = {
                         })
                     } else if (classification_number.charAt(2) != 0) {
                         var firstSummary = classification_number.charAt(0) + '00'
-                        firstSummary = parseInt(firstSummary, 10)
                         var secondSummary = classification_number.charAt(0) + classification_number.charAt(1) + '0'
-                        secondSummary = parseInt(secondSummary, 10)
-
-                        classification_number = Number(classification_number)
-                        console.log(classification_number)
                         db.get().collection('classification').insertOne({
                             classificationNumber: classification_number,
                             classificationName: classification_name,
@@ -80,48 +86,9 @@ module.exports = {
     },
     searchClassification: (keyword) => {
         return new Promise(async (resolve, reject) => {
-            if (!isNaN(keyword)) {
-                keyword = parseInt(keyword, 10)
-                //const searchNumber = await db.get().collection('classification').find({ classificationNumber: keyword }).toArray()
-                const searchNumber = await db.get().collection('classification').aggregate([
-                    {
-                        $match: {
-                            classificationNumber: keyword
-                        }
-                    },{
-                        $lookup: {
-                            from: 'classification',
-                            localField: 'firstSummary',
-                            foreignField: 'classificationNumber',
-                            as: 'firstSummaryDetails'
-                        }
-                    },{
-                        $lookup: {
-                            from: 'classification',
-                            localField: 'secondSummary',
-                            foreignField: 'classificationNumber',
-                            as: 'secondSummaryDetails'
-                        }
-                    },{
-                        $lookup: {
-                            from: 'classification',
-                            localField: 'thirdSummary',
-                            foreignField: 'classificationNumber',
-                            as: 'thirdSummaryDetails'
-                        }
-                    }
-                ]).toArray()
-                //console.log(searchNumber)
-                if(searchNumber){
-                    resolve(searchNumber)
-                }else{
-                    resolve({error:true,msg:"No result found"})
-                }
-                
-            } else {
                 const searchName = await db.get().collection('classification').aggregate([
                     {
-                        $match:{
+                        $match: {
                             $text: {
                                 $search: keyword
                             }
@@ -133,65 +100,114 @@ module.exports = {
                             foreignField: 'classificationNumber',
                             as: 'firstSummaryDetails'
                         }
-                    },{
+                    }, {
                         $lookup: {
                             from: 'classification',
                             localField: 'secondSummary',
                             foreignField: 'classificationNumber',
                             as: 'secondSummaryDetails'
                         }
-                    },{
+                    }, {
                         $lookup: {
                             from: 'classification',
                             localField: 'thirdSummary',
                             foreignField: 'classificationNumber',
                             as: 'thirdSummaryDetails'
                         }
+                    }, {
+                        $lookup: {
+                            from: 'classification',
+                            localField: 'decimalSummary',
+                            foreignField: 'classificationNumber',
+                            as: 'decimalSummaryDetails'
+                        }
                     }
                 ]).toArray()
-                if(searchName){
+                if (searchName) {
                     resolve(searchName)
-                }else{
-                    resolve({error:true,msg:"No result found"})
+                } else {
+                    resolve({ error: true, msg: "No result found" })
                 }
-            }
-            //const searchNumber = await db.get().collection('classification').findOne({classificationNumber:keyword})
-            //const searchName = await db.get().collection('classification').find({ $text: { $search: keyword}}).toArray()
-            //console.log(searchName)
-            //resolve(searchName)
         })
     },
-    searchChildClassifications:(classification_number)=>{
-        return new Promise(async(resolve,reject)=>{
-            classification_number = parseInt(classification_number,10)
-            var findSummary = await db.get().collection('classification').findOne({classificationNumber:classification_number})
-            if(findSummary.summary == "first summary"){
+    searchChildClassifications: (classification_number) => {
+        return new Promise(async (resolve, reject) => {
+            var findSummary = await db.get().collection('classification').findOne({ classificationNumber: classification_number })
+            if (findSummary.summary == "first summary") {
                 var findChild = await db.get().collection('classification').find({
-                    $and:[
-                        {firstSummary:classification_number},
-                        {summary:"second summary"}
-                    ]}).toArray()
-                console.log(findChild)
-                resolve(findChild)
-            }else if(findSummary.summary == "second summary"){
+                    $and: [
+                        { firstSummary: classification_number },
+                        { summary: "second summary" }
+                    ]
+                }).toArray()
+            } else if (findSummary.summary == "second summary") {
                 var findChild = await db.get().collection('classification').find({
-                    $and:[
-                        {secondSummary:classification_number},
-                        {summary:"third summary"}
-                    ]}).toArray()
-                console.log(findChild)
-                resolve(findChild)
-            }else if(findSummary.summary == "third summary"){
+                    $and: [
+                        { secondSummary: classification_number },
+                        { summary: "third summary" }
+                    ]
+                }).toArray()
+            } else if (findSummary.summary == "third summary") {
                 var findChild = await db.get().collection('classification').find({
-                    $and:[
-                        {thirdSummary:classification_number},
-                        {summary:"decimal summary"}
-                    ]}).toArray()
-                console.log(findChild)
-                resolve(findChild)
+                    $and: [
+                        { thirdSummary: classification_number },
+                        { summary: "decimal summary" }
+                    ]
+                }).toArray()
+            } else if(findSummary.summary == "decimal summary"){
+                var findChild = await db.get().collection('classification').find({
+                    $and: [
+                        {decimalSummary: classification_number},
+                        {summary: "double decimal summary"}
+                    ]
+                }).toArray()
             }
-            
-            
+            const searchNumber = await db.get().collection('classification').aggregate([
+                {
+                    $match: {
+                        classificationNumber: classification_number
+                    }
+                }, {
+                    $lookup: {
+                        from: 'classification',
+                        localField: 'firstSummary',
+                        foreignField: 'classificationNumber',
+                        as: 'firstSummaryDetails'
+                    }
+                }, {
+                    $lookup: {
+                        from: 'classification',
+                        localField: 'secondSummary',
+                        foreignField: 'classificationNumber',
+                        as: 'secondSummaryDetails'
+                    }
+                }, {
+                    $lookup: {
+                        from: 'classification',
+                        localField: 'thirdSummary',
+                        foreignField: 'classificationNumber',
+                        as: 'thirdSummaryDetails'
+                    }
+                }, {
+                    $lookup: {
+                        from: 'classification',
+                        localField: 'decimalSummary',
+                        foreignField: 'classificationNumber',
+                        as: 'decimalSummaryDetails'
+                    }
+                }
+            ]).toArray()
+            if(findChild.length != 0){
+                resolve({classificationData:searchNumber,childData:findChild})
+            } else{
+                resolve({classificationData:searchNumber})
+            }
+        })
+    },
+    getMainClassification:()=>{
+        return new Promise(async(resolve,reject)=>{
+            var classification = await db.get().collection('classification').find({summary:"first summary"}).sort({classificationNumber:1}).toArray()
+            resolve(classification)
         })
     }
 }

@@ -1,39 +1,62 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import '../../styles/output.css'
+import NewArrivalsForm from './FormNewArrivals'
+import SuccessfullMsg from './SuccessfullMsg'
+import axios from 'axios'
+import { GrClose } from 'react-icons/gr'
+import { IconContext } from 'react-icons'
 
-
-function NewArrivals() {
-    //const imgUrl = "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.123freevectors.com%2Fbaby-blue-polygon-triangle-pattern-background-130823%2F&psig=AOvVaw1dgNyndRPYBeK-qKTr5IzV&ust=1636528295054000&source=images&cd=vfe&ved=0CAsQjRxqFwoTCLjeu8DuivQCFQAAAAAdAAAAABAD"
+function NewArrivals(props) {
+    const [IsShowForm, setIsShowForm] = useState(false)
+    const [success, setSuccess] = useState(false)
+    const [error, setError] = useState(false)
+    const [newArrivals, setNewArrivals] = useState([])
+    const [classification, setClassification] = useState()
+    function showForm() {
+        setIsShowForm(true)
+    }
+    useEffect(() => {
+        axios.get('/admin/api/get-new-arrivals').then((res) => {
+            setNewArrivals(res.data)
+        })
+    })
     return (
-        <div className='pt-24 w-3/4 mx-auto'>
-            <div className="">
-                <div className="flex p-6">
-                    <h1 className="text-xl text-gray-600 font-bold flex-1">New Arrivals</h1>
-                    <div className="flex-1 text-right">
-                        <button className="p-1 px-6 rounded bg-blue-600 text-white">Add</button>
-                    </div>     
-                </div> 
-                <div className="arrivals">
-                    <div className="rounded p-6 cursor-pointer bg-gradient-to-r from-green-500 to-blue-500 lowercase shadow-lg border-0 hover:transform hover:scale-105 mb-4">
-                         <h1 className="text-2xl text-white capitalize">Aakashangaliloode Oru Theevandi Yathra</h1>
-                         <p><span className="italic">By </span><span className="text-gray-600">MIYAZAWA KENJ</span></p>
-                         <p className="mt-4"><span className="font-bold text-gray-600 capitalize text-gray-600 ">Call Number : </span><span className="text-gray-100 font-bold uppercase">910 TYE/L</span></p>
-                         <p><span className="font-bold capitalize text-gray-600">Barcode : </span><span className="text-gray-100 font-bold">1546</span></p>
-                    </div>
-                    <div className="rounded p-6 cursor-pointer bg-gradient-to-r from-green-500 to-blue-500 lowercase shadow-lg border-0 hover:transform hover:scale-105 mb-4">
-                         <h1 className="text-2xl text-white capitalize">Aakashangaliloode Oru Theevandi Yathra</h1>
-                         <p><span className="italic">By </span><span className="text-gray-600">MIYAZAWA KENJ</span></p>
-                         <p className="mt-4"><span className="font-bold text-gray-600 capitalize text-gray-600 ">Call Number : </span><span className="text-gray-100 font-bold uppercase">910 TYE/L</span></p>
-                         <p><span className="font-bold capitalize text-gray-600">Barcode : </span><span className="text-gray-100 font-bold">1546</span></p>
-                    </div>
-                    <div className="rounded p-6 cursor-pointer bg-gradient-to-r from-green-500 to-blue-500 lowercase shadow-lg border-0 hover:transform hover:scale-105 mb-4">
-                         <h1 className="text-2xl text-white capitalize">Aakashangaliloode Oru Theevandi Yathra</h1>
-                         <p><span className="italic">By </span><span className="text-gray-600">MIYAZAWA KENJ</span></p>
-                         <p className="mt-4"><span className="font-bold text-gray-600 capitalize text-gray-600 ">Call Number : </span><span className="text-gray-100 font-bold uppercase">910 TYE/L</span></p>
-                         <p><span className="font-bold capitalize text-gray-600">Barcode : </span><span className="text-gray-100 font-bold">1546</span></p>
-                    </div>
-                </div>
+        <div className="col-span-2">
+            <div className="flex p-6 w-3/4 mx-auto">
+                <h1 className="text-2xl text-gray-600 font-bold flex-1">New Arrivals</h1>
+                {props.isAdmin && <div className="flex-1 text-right">
+                    <button className="p-1 px-6 rounded text-white" style={{ backgroundColor: "#40514E" }} onClick={showForm}>Add</button>
+                </div>}
             </div>
+            <div className="arrivals mt-2">
+                {newArrivals &&
+                    newArrivals.map((book) => {
+                        return (
+                            <div className="w-3/4 mx-auto grid grid-cols-4 mb-4 bg-white rounded-lg shadow-2xl">
+                                <div className="col-span-3 p-4 pl-6">
+                                    <p className="font-bold text-xl text-blue-700 cursor-pointer hover:text-blue-800" onClick={() => window.open(`http://192.168.1.10:81/cgi-bin/koha/opac-search.pl?idx=ti&q=${book.title}&weight_search=1`)}>{book.title}</p>
+                                    <p className="text-md font-bold text-gray-600"><span className="italic">By: </span>{book.author}</p>
+                                    <p className="text-gray-400 text-sm mt-2">Publication: <span className="text-gray-500 font-medium">{book.publication}</span></p>
+                                    <p className="text-gray-400 text-sm ">Classification: <span className="text-gray-500 capitalize font-medium">{book.classificationDetails.classificationName}</span></p>
+                                </div>
+                                <div className="bg-indigo-500 font-bold text-center shadow-md py-4 p-2 text-white">
+                                    <p>{book.collection}</p>
+                                    <p>{book.classificationNumber}</p>
+                                    <p>{book.itemNumber}</p>
+                                    <p>{book.barcode}</p>
+                                </div>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+            {IsShowForm && <NewArrivalsForm showForm={setIsShowForm} setSuccess={setSuccess} />}
+            {IsShowForm && <div onClick={() => setIsShowForm(false)} className="fixed top-12  right-12 z-50">
+                <IconContext.Provider value={{ color: 'white', className: 'bg-white p-2 w-12 h-12 cursor-pointer rounded-full' }}>
+                    <GrClose />
+                </IconContext.Provider>
+            </div>}
+            {success && <SuccessfullMsg />}
         </div>
     )
 }

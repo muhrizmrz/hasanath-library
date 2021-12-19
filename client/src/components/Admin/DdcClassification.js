@@ -1,28 +1,38 @@
-import React, { useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 import axios from 'axios'
+import {useNavigate} from 'react-router-dom'
 
-function DdcClassification() {
-    const [classification, setClassification] = useState()
+function DdcClassification(props) {
+    const [classifications, setClassifications] = useState()
+    const navigate = useNavigate()
     useEffect(() => {
         axios.get('/admin/api/get-main-classification').then((res) => {
-            setClassification(res.data)
+            setClassifications(res.data)
         })
     })
+    function goToDetails(){
+        if(props.isAdmin){
+            navigate('/admin/view-classification')
+        }else {
+            navigate('/view-classification')
+        }
+        
+    }
     return (
-        <div className="mt-8 p-2 py-4 bg-white shadow-lg">
-            <p className="p-2 text-2xl text-gray-700 fond-extrabold mb-2">DDC Classification</p>
+        <div className="mt-8 p-4 py-4 bg-white shadow-lg border rounded-3xl">
+            <p className="p-2 text-2xl text-gray-700 fond-extrabold mb-2 ml-4">DDC Classification</p>
             <div className="px-2 w-full">
-                {classification &&
-                    classification.map((obj) => {
+                {classifications &&
+                    classifications.map((obj) => {
                         return (
-                            <div className="text-gray-600 bg-blue-100 font-bold capitalize bg-white hover:bg-blue-300 w-full flex justify-between p-1 px-3 cursor-pointer hover:border-2 border-2 border-white rounded-md">
+                            <div onClick={goToDetails} className="text-gray-600 capitalize bg-white w-full flex justify-between px-3 cursor-pointer hover:border-2 border-2 border-white rounded-md">
                                 <td className="p-1 w-1/4">{obj.classificationNumber}</td>
                                 <td className="p-1 w-3/4">{obj.classificationName}</td>
                             </div>
                         )
                     })
                 }
-
+                <p onClick={goToDetails} className='text-blue-500 text-right mt-2 cursor-pointer hover:text-blue-600'>View Details</p>
             </div>
         </div>
     )

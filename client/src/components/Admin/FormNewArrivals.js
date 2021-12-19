@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import '../../styles/output.css'
 import Loader from 'react-loader-spinner'
 import axios from 'axios'
-import ErrorMsg from './ErrorMsg'
 
 function NewArrivalsForm(props) {
     const [title, setTitle] = useState()
@@ -20,13 +19,13 @@ function NewArrivalsForm(props) {
             "Content-Type": "application/json"
         }
         axios.post('/admin/api/add-new-arrivals',{
-            title,
-            author,
-            publication,
-            classificationNumber,
-            itemNumber,
-            barcode,
-            collection
+            title: title.toLowerCase(),
+            author: author.toLowerCase(),
+            publication: publication.toLowerCase(),
+            classificationNumber: classificationNumber.toLowerCase(),
+            itemNumber: itemNumber.toLowerCase(),
+            barcode: barcode.toLowerCase(),
+            collection: collection.toLowerCase()
         },headers).then((response)=>{
             setLoading(false)
             props.showForm(false)
@@ -71,6 +70,7 @@ function NewArrivalsForm(props) {
                     <div class="grid grid-cols-1 space-y-2">
                         <label for="collection" class="font-bold text-lg text-gray-500">Collection</label>
                         <select  onChange={(e) => setCollection(e.target.value)} id="collection" name="collection" placeholder="Collection" class="text-gray-700 p-2 bg-gray-200 rounded border-gray-300 focus:outline-none focus:bg-blue-100">
+                            <option value={null}>Select Collection</option>
                             <option value="G/M">G/M</option>
                             <option value="R/M">R/M</option>
                             <option value="G/E">G/E</option>

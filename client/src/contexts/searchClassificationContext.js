@@ -5,9 +5,9 @@ export const SearchContext = createContext(null)
 function Search({children}){
     const [searchClassificationResult, setSearchClassificationResult] = useState([])
     const [searchText,setSearchText] = useState(null)
-    const [searchLoading,setSearchLoading] = useState(false)
+    const [loadingSearch,setLoadingSearch] = useState(false)
     return(
-        <SearchContext.Provider value={{searchClassificationResult,setSearchClassificationResult,searchText,setSearchText,searchLoading,setSearchLoading}}>
+        <SearchContext.Provider value={{searchClassificationResult,setSearchClassificationResult,searchText,setSearchText,loadingSearch,setLoadingSearch}}>
             {children}
         </SearchContext.Provider>
     )

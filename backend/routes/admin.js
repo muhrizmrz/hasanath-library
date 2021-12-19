@@ -46,6 +46,19 @@ adminRouter.get('/api/get-new-arrivals',(req,res)=>{
 
 adminRouter.get('/api/get-main-classification',(req,res)=>{
     classificationHelper.getMainClassification().then((result)=>{
+
+        res.send(result)
+    })
+})
+
+adminRouter.get('/api/get-ten-classification',(req,res)=>{
+    classificationHelper.getSecondSummary(req.query.firstSummary).then((result)=>{
+        res.json(result)
+    })
+})
+
+adminRouter.get('/api/get-child-classifications',(req,res)=>{
+    classificationHelper.getChildClassification(req.query.secondSummary).then((result)=>{
         res.send(result)
     })
 })

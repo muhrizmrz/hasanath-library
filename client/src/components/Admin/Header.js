@@ -1,26 +1,30 @@
-import '../../../src/styles/output.css'
 import React, { useContext, useState } from 'react'
 import axios from 'axios'
-//import {FaGithub} from 'react-icons/fa'
 import { SearchContext } from '../../contexts/searchClassificationContext'
 import { useNavigate } from 'react-router-dom'
 import Loading from './Loading'
 
-function Header() {
-    //const history = useHistory()
-    const [keyword, setKeyword] = useState()
-    const { searchLoading, setSearchLoading, setSearchClassificationResult, searchClassificationResult, setSearchText, searchText } = useContext(SearchContext)
+function Header(props) {
+    const [keywordForSearchClassification, setKeywordForSearchClassification] = useState()
+    const { loadingSearch, setLoadingSearch, setSearchClassificationResult,setSearchText} = useContext(SearchContext)
     const navigate = useNavigate()
+    var classificationLink, homeLink
+    if(props.isAdmin){
+        classificationLink = '/admin/view-classification'
+        homeLink = '/admin'
+    }else {
+        homeLink = '/'
+        classificationLink = '/view-classification'
+    }
     const handleSearch = (e) => {
-        console.log(keyword)
-        setSearchText(keyword)
-        setSearchLoading(true)
+        setSearchText(keywordForSearchClassification)
+        setLoadingSearch(true)
         e.preventDefault()
         axios.get('/admin/api/search-classification', {
-            params: { keyword: keyword }
+            params: { keyword: keywordForSearchClassification }
         }).then((response) => {
-            setSearchLoading(false)
-            setKeyword('')
+            setLoadingSearch(false)
+            setKeywordForSearchClassification('')
             navigate('/admin/search-classification')
             setSearchClassificationResult(response.data)
         });
@@ -34,21 +38,18 @@ function Header() {
                             <h1 className="text-lg font-bold">Hasanath Library</h1>
                         </div>
                         <form className="col-span-2 flex" onSubmit={(e) => handleSearch(e)}>
-                            <input type='text' onChange={(e)=>setKeyword(e.target.value)} placeholder='Search' className='py-1 px-3 bg-white rounded w-3/4 border border-transparent focus:outline-none ring-2 ring-blue-400 shadow-lg focus:ring-blue-500 text-gray-500' />
-                            <input type="submit" className="ml-4 p-1 px-6 rounded text-white" style={{ backgroundColor: "#40514E" }} value="Search" />
+                            <input type='text' onChange={(e)=>setKeywordForSearchClassification(e.target.value)} placeholder='Search' className='py-1 px-3 bg-white rounded w-3/4 border border-transparent focus:outline-none ring-2 ring-blue-400 shadow-lg focus:ring-blue-500 text-gray-500' />
+                            <input type="submit" className="ml-4 p-1 px-6 rounded-md text-white bg-blue-500" value="Search" />
                         </form>
-
-
                         <div className="text-right text-gray-400 flex">
-                            <p className="cursor-pointer" onClick={() => navigate('/admin/view-classification')}>Classification List</p>
-                            <p className="cursor-pointer ml-4">New Arrivals</p>
+                            <p className="cursor-pointer" onClick={() => navigate(homeLink)}>Home</p>
+                            <p className="cursor-pointer ml-4" onClick={() => navigate(classificationLink)}>Classification</p>               
+                            {props.isAdmin && <p className="cursor-pointer ml-4" onClick={() => navigate('/admin/add-classification')}>Add Classification</p>}
                         </div>
                     </div>
                 </header>
-
             </div>
-
-            {searchLoading && <Loading />}
+            {loadingSearch && <Loading />}
         </div>
     )
 }

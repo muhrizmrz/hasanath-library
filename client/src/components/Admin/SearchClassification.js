@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router'
-import '../../styles/output.css'
 import { SearchContext } from '../../contexts/searchClassificationContext'
-import { ViewChildClassification } from '../../contexts/viewChildClassifications'
 import axios from 'axios'
 import ViewChildClassifications from './viewChildClassifications'
 import {GrClose} from 'react-icons/gr'
@@ -11,24 +9,19 @@ import { IconContext } from 'react-icons'
 function SearchClassification() {
     const navigate = useNavigate()
     const { searchClassificationResult,searchText} = useContext(SearchContext)
-    //const {setChildData} = useContext(ViewChildClassification)
-    const [dataChild, setDataChild] = useState([])
-    const [viewChild, setViewChild] = useState(false)
-    const [parentClassification, setParentClassification] = useState()
-    const [Clicked, setClicked] = useState(false)
-    const [keyword, setKeyword] = useState()
+    const [childData, setChildData] = useState([])
+    const [viewChildModel, setViewChildModel] = useState(false)
 
-    function getChildData(classificationNumber){
-        setParentClassification(classificationNumber)
+    function getChildData(parentClassificationNumber){
         axios.get('/admin/api/view-child-classifications',{
-            params: {classification_number: classificationNumber}
+            params: {classification_number: parentClassificationNumber}
         }).then((response)=>{
-            setViewChild(true)  
-            setDataChild(response.data)
+            setViewChildModel(true)  
+            setChildData(response.data)
         })  
     }
     useEffect(()=>{
-        console.log(searchText)
+        //while refreshing
         if(searchText == null){
             navigate('/admin/view-classification')
         }
@@ -66,12 +59,12 @@ function SearchClassification() {
                     }
                 </div>
             </div>
-            {viewChild &&<div onClick={()=>setViewChild(false)} className="fixed top-12  right-12 z-50">
-                <IconContext.Provider value={{color:'white',className:'bg-white p-2 w-12 h-12 cursor-pointer rounded-full'}}>
+            {viewChildModel &&<div onClick={()=>setViewChildModel(false)} className="fixed top-12  right-96 z-50">
+                <IconContext.Provider value={{color:'white',className:'bg-red-500 p-2 w-12 h-12 cursor-pointer rounded-full'}}>
                 <GrClose/>
                 </IconContext.Provider>
             </div>}
-            {viewChild && <ViewChildClassifications data={dataChild} setData={setDataChild} showBooks={showBooks}/>}
+            {viewChildModel && <ViewChildClassifications data={childData} setData={setChildData} showBooks={showBooks}/>}
         </div>
     )
 }

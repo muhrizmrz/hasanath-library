@@ -4,9 +4,14 @@ import './../../styles/style.css'
 import { SecondSummaryContext } from '../../contexts/SecondSummaryContext'
 
 function ChildSummary() {
-    const { activeClassification, childClassification, setChildClassification, classificationCount, setClassificationCount } = useContext(SecondSummaryContext)
+    const { activeClassification, childClassification, setChildClassification, classificationCount, setClassificationCount,summaryFirst, setSummaryFirst } = useContext(SecondSummaryContext)
     useEffect(() => {
-        //console.log(acti)
+        axios.get('/admin/api/search-classification', {
+            params: { keyword: activeClassification }
+        }).then((response) => {
+            setSummaryFirst(response.data)
+            console.log(summaryFirst)
+        });
         axios.get('/admin/api/get-child-classifications', {
             params: { secondSummary: activeClassification }
         }).then((res) => {
@@ -14,7 +19,7 @@ function ChildSummary() {
             setClassificationCount(res.data.length)
         })
     }, [])
-    function showBooks(callNumber){
+    function showBooks(callNumber) {
         window.open(`http://dhic-library:81/cgi-bin/koha/opac-search.pl?idx=callnum&q=${callNumber}&weight_search=1`)
     }
     return (
@@ -27,18 +32,25 @@ function ChildSummary() {
                     </div>
 
                 </div>
-                <div>
-                        {childClassification &&
-                            childClassification.map((obj) => {
-                                return (
-                                    <div onClick={()=>showBooks(obj.classificationNumber)} className={obj.summary === 'third summary'? 'text-lg text-white grid grid-cols-6 gap-2 cursor-pointer':'pl-12 text-lg capitalize text-white grid grid-cols-6 gap-2 cursor-pointer'}>
-                                        <p className='p-2 mr-4 text-lg'>{obj.classificationNumber}</p>
-                                        <p className='p-2 col-span-5'>{obj.classificationName}</p>
-                                    </div>
-                                )
+                <div className='pb-8'>
+                    {summaryFirst &&
+                        <div onClick={() => showBooks(summaryFirst[0].classificationNumber)} className='text-lg text-white grid grid-cols-6 gap-2 cursor-pointer'>
+                            <p className='p-2 mr-4 text-lg'>{summaryFirst[0].classificationNumber}</p>
+                            <p className='p-2 col-span-5'>{summaryFirst[0].classificationName}</p>
+                        </div>
+                    }
 
-                            })
-                        }
+                    {childClassification &&
+                        childClassification.map((obj) => {
+                            return (
+                                <div onClick={() => showBooks(obj.classificationNumber)} className={obj.summary === 'third summary' ? 'text-lg text-white grid grid-cols-6 gap-2 cursor-pointer capitalize' : 'pl-12 text-lg capitalize text-white grid grid-cols-6 gap-2 cursor-pointer'}>
+                                    <p className='p-2 mr-4 text-lg'>{obj.classificationNumber}</p>
+                                    <p className='p-2 col-span-5'>{obj.classificationName}</p>
+                                </div>
+                            )
+
+                        })
+                    }
                 </div>
             </div>
         </div>

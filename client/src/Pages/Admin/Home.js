@@ -1,10 +1,15 @@
 import Header from "../../components/Admin/Header";
-import React from 'react'
+import React, { useContext, useLayoutEffect } from 'react'
 import NewArrivals from '../../components/Admin/NewArrivals';
 import LibraryDuty from "../../components/Admin/LibraryDuty";
 import DdcClassification from "../../components/Admin/DdcClassification";
+import { LogInContext } from "../../contexts/IsLoggedAdmin";
 
 function Home(props) {
+    const {authorizeAdmin} = useContext(LogInContext)
+    useLayoutEffect(() => {
+        authorizeAdmin(props.isAdmin)
+    }, [])
     return (
         <div className="bg-gray-100 h-auto">
             <Header isAdmin={props.isAdmin}/>

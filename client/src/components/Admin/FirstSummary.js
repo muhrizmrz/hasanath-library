@@ -4,7 +4,7 @@ import './../../styles/style.css'
 import { SecondSummaryContext } from '../../contexts/SecondSummaryContext'
 
 function FirstSummary() {
-    const {setFirst,setFirstSummary, setLoading, setHundredClassification,setChildClassification, setActiveClassification,setClassificationCount,activeTen, setActiveTen,mainClassification, setMainClassification} = useContext(SecondSummaryContext)
+    const {setFirst,setFirstSummary, setLoading, setHundredClassification,setChildClassification, setActiveClassification,setClassificationCount,activeTen, setActiveTen,mainClassification, setMainClassification,setSummaryFirst} = useContext(SecondSummaryContext)
     useEffect(() => {
         axios.get('/admin/api/get-main-classification').then((res) => {
             setMainClassification(res.data)
@@ -17,6 +17,11 @@ function FirstSummary() {
         }).then((response) => {
             setFirst(response.data)
             setActiveClassification(response.data[0].classificationNumber)
+            axios.get('/admin/api/search-classification', {
+                params: { keyword: response.data[0].classificationNumber }
+            }).then((response) => {
+                setSummaryFirst(response.data)
+            });
         });
         axios.get('admin/api/get-ten-classification', {
             params: {
@@ -32,6 +37,7 @@ function FirstSummary() {
             }).then((response) => {
                 setChildClassification(response.data)
                 setClassificationCount(response.data.length)
+                
             })
         })
     }

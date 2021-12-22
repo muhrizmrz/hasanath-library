@@ -1,20 +1,19 @@
 import React, { useContext, useLayoutEffect } from 'react'
-import AddClassification from '../../components/Admin/AddClassification'
+import EditClassification from '../../components/Admin/EditClassification'
 import Header from '../../components/Admin/Header'
 import { LogInContext } from '../../contexts/IsLoggedAdmin'
 
-
-function ClassificationList(props) {
+function EditClassificationPage(props) {
     const {authorizeAdmin} = useContext(LogInContext)
-    useLayoutEffect(() => {
+    useLayoutEffect(()=>{
         authorizeAdmin(props.isAdmin)
-    }, [])
+    })
     return (
         <div>
-            <Header isAdmin={props.isAdmin} />
-            <AddClassification />
+            <Header isAdmin={props.isAdmin}/>
+            <EditClassification isAdmin={props.isAdmin}/>
         </div>
     )
 }
 
-export default ClassificationList
+export default EditClassificationPage

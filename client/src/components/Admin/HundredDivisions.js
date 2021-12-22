@@ -4,7 +4,7 @@ import axios from 'axios'
 import './../../styles/style.css'
 
 function HundredDivisions() {
-    const { firstSummary, hundredClassification, setHundredClassification, activeClassification, setActiveClassification, setChildClassification, setClassificationCount, first, setFirst } = useContext(SecondSummaryContext)
+    const { firstSummary, hundredClassification, setHundredClassification, activeClassification, setActiveClassification, setChildClassification, setClassificationCount, first, setFirst,setSummaryFirst } = useContext(SecondSummaryContext)
     useEffect(() => {
         axios.get('/admin/api/search-classification', {
             params: { keyword: firstSummary }
@@ -14,7 +14,7 @@ function HundredDivisions() {
         });
         axios.get('admin/api/get-ten-classification', {
             params: {
-                firstSummary: firstSummary
+                firstSummary: firstSummary 
             }
         }).then((res) => {
             setHundredClassification(res.data)
@@ -23,6 +23,11 @@ function HundredDivisions() {
     }, [])
     function getChildClassification(secondSummary) {
         setActiveClassification(secondSummary)
+        axios.get('/admin/api/search-classification', {
+            params: { keyword: secondSummary }
+        }).then((response) => {
+            setSummaryFirst(response.data)
+        });
         axios.get('/admin/api/get-child-classifications', {
             params: { secondSummary: secondSummary }
         }).then((res) => {
@@ -32,7 +37,7 @@ function HundredDivisions() {
     }
     return (
         <div className='bg-gray-800 col-span-2 overflow-y-auto hide-scroll'>
-            <div className='mt-24 pt-2 font-sans px-4'>
+            <div className='mt-24 pt-2 font-sans px-4 pb-6'>
                 <p className="text-2xl p-3 mb-3 text-gray-100">Hundred Summary Classes</p>
                 <table className='w-full'>
                     {first &&

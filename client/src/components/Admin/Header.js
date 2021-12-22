@@ -25,9 +25,21 @@ function Header(props) {
         }).then((response) => {
             setLoadingSearch(false)
             setKeywordForSearchClassification('')
-            navigate('/admin/search-classification')
+            if(props.isAdmin){
+               navigate('/admin/search-classification') 
+            }else{
+                navigate('/search-classification')
+            }
+            
             setSearchClassificationResult(response.data)
         });
+    }
+    const handleLogout = ()=>{
+        axios.get('/admin/api/logout').then((result)=>{
+            if(result.data){
+                navigate('/')
+            }
+        })
     }
     return (
         <div>
@@ -45,6 +57,7 @@ function Header(props) {
                             <p className="cursor-pointer" onClick={() => navigate(homeLink)}>Home</p>
                             <p className="cursor-pointer ml-4" onClick={() => navigate(classificationLink)}>Classification</p>               
                             {props.isAdmin && <p className="cursor-pointer ml-4" onClick={() => navigate('/admin/add-classification')}>Add Classification</p>}
+                            {props.isAdmin? <p className="cursor-pointer ml-4 text-red-600" onClick={handleLogout}>Logout</p>:<p className="cursor-pointer ml-4 text-green-600" onClick={()=>navigate('/admin/login')}>Admin Login</p>}
                         </div>
                     </div>
                 </header>

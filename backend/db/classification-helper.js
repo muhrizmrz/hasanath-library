@@ -1,6 +1,7 @@
 const { response } = require('express')
 const { resolve, reject } = require('promise')
 const db = require('../config/connection')
+const objectId = require('mongodb').ObjectId
 
 module.exports = {
     addClassification: (classification_number, classification_name) => {
@@ -69,6 +70,12 @@ module.exports = {
             } else {
                 resolve({ msg: "already available", error: true })
             }
+        })
+    },
+    editClassification:(_id)=>{
+        return new Promise(async(resolve,reject)=>{
+            await db.get().collection('classification').deleteOne({_id:objectId(_id)})
+            resolve(true)
         })
     },
     viewClassification: () => {

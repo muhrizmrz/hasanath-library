@@ -5,12 +5,50 @@ const bodyParser = require('body-parser')
 const adminRouter = express.Router()
 const classificationHelper = require("./../db/classification-helper")
 const newArrivals = require('../db/new-arrivals')
+const db = require('../config/connection')
+const objectId = require('mongodb').ObjectId
 
 
 adminRouter.post('/api/add-classification',(req,res)=>{
     classificationHelper.addClassification(req.body.classification_number,req.body.classification_name).then((result)=>{
         res.json(result)
     })
+})
+
+adminRouter.post('/api/edit-classification',(req,res)=>{
+    classificationHelper.editClassification(req.body._id).then((status)=>{
+        if(status){
+            classificationHelper.addClassification(req.body.classification_number,req.body.classification_name).then((result)=>{
+                res.json(result)
+            })
+        }
+    })
+})
+
+adminRouter.post('/api/login',(req,res)=>{
+    const loginDetails = {
+        username: 'admin',
+        password: 'pass'
+    }
+    if(req.body.username == loginDetails.username && req.body.password == loginDetails.password){
+        req.session.username = req.body.username
+        res.json(true)
+    }else{
+        res.json(false)
+    }
+})
+
+adminRouter.get('/api/authorize-admin',(req,res)=>{
+    if(req.session.username){
+        res.json(true)
+    }else {
+        res.json(false)
+    }
+})
+
+adminRouter.get('/api/logout',async(req,res)=>{
+    await req.session.destroy()
+    res.json(true)
 })
 
 adminRouter.get('/api/view-classification',(req,res)=>{
@@ -29,6 +67,11 @@ adminRouter.get('/api/view-child-classifications',(req,res)=>{
     classificationHelper.searchChildClassifications(req.query.classification_number).then((result)=>{
         res.json(result)
     })
+})
+
+adminRouter.get('/api/get-one-classfication',async(req,res)=>{
+    const classificationDetails = await db.get().collection('classification').findOne({_id:objectId(req.query._id)})
+    res.json(classificationDetails)
 })
 
 adminRouter.post('/api/add-new-arrivals',(req,res)=>{

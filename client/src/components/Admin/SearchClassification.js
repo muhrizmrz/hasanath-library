@@ -5,13 +5,14 @@ import axios from 'axios'
 import ViewChildClassifications from './viewChildClassifications'
 import {GrClose} from 'react-icons/gr'
 import { IconContext } from 'react-icons'
+import { EditContext } from '../../contexts/EditClassificationContext'
 
-function SearchClassification() {
+function SearchClassification(props) {
     const navigate = useNavigate()
     const { searchClassificationResult,searchText} = useContext(SearchContext)
     const [childData, setChildData] = useState([])
     const [viewChildModel, setViewChildModel] = useState(false)
-
+    const {setToBeDelete} = useContext(EditContext)
     function getChildData(parentClassificationNumber){
         axios.get('/admin/api/view-child-classifications',{
             params: {classification_number: parentClassificationNumber}
@@ -28,6 +29,12 @@ function SearchClassification() {
     })
     function showBooks(call_number){
         window.open(`http://192.168.1.10:81/cgi-bin/koha/opac-search.pl?idx=callnum&q=${call_number}&weight_search=1`)
+    }
+    function editClassification(call_number_id){
+        setToBeDelete(call_number_id)
+        setTimeout(() => {
+          navigate('/admin/edit-classification')  
+        }, 1000);
     }
     return (
         <div className='pt-24 w-100 mx-auto relative h-auto pb-28'>
@@ -52,6 +59,9 @@ function SearchClassification() {
                                     <div className="flex px-3 absolute bottom-0 mb-6 mt-4">
                                         <button className="p-2 px-3 bg-green-400 mx-2 rounded text-white capitalize" onClick={()=>getChildData(result.classificationNumber)}>View Details</button>
                                         <button className="p-2 px-3 bg-green-400 mx-2 rounded text-white capitalize" onClick={()=>showBooks(result.classificationNumber)}>show books</button>
+                                        {props.isAdmin &&
+                                            <button className="p-2 px-3 bg-blue-500 mx-2 rounded text-white capitalize" onClick={()=>editClassification(result._id)}>Edit classification</button>
+                                        }
                                     </div>
                                 </div>
                             )

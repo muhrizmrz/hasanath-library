@@ -3,6 +3,8 @@ const cors = require('cors');
 const { application } = require('express');
 const db = require('./backend/config/connection')
 const bodyParser = require('body-parser')
+const {v4:uuidv4} = require('uuid')
+const session = require('express-session')
 var adminRouter = require('./backend/routes/admin');
 var usersRouter = require('./backend/routes/user');
 
@@ -10,6 +12,7 @@ const app = express();
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
+app.use(session({secret:uuidv4(),resave:true,saveUninitialized:true}))
 app.use('/admin', adminRouter);
 app.use('/', usersRouter);
 

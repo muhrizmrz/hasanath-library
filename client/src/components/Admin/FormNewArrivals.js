@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import '../../styles/output.css'
 import Loader from 'react-loader-spinner'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 function NewArrivalsForm(props) {
     const [title, setTitle] = useState()
@@ -12,11 +13,13 @@ function NewArrivalsForm(props) {
     const [barcode, setBarcode] = useState()
     const [collection, setCollection] = useState()
     const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
     function handleSubmit(e){
         setLoading(true)
         e.preventDefault()
         const headers = {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "x-access-token": localStorage.getItem('token')
         }
         axios.post('/admin/api/add-new-arrivals',{
             title: title.toLowerCase(),
@@ -27,14 +30,19 @@ function NewArrivalsForm(props) {
             barcode: barcode.toLowerCase(),
             collection: collection.toLowerCase()
         },headers).then((response)=>{
-            setLoading(false)
-            props.showForm(false)
-            props.setSuccess(true)
-            setTimeout(() => {
-                props.setSuccess(false)
-            }, 4000);
+            if(!response.data.admin){
+                navigate('/admin/login')
+            }else{
+                setLoading(false)
+                props.showForm(false)
+                props.setSuccess(true)
+                setTimeout(() => {
+                    props.setSuccess(false)
+                }, 4000);
+            }
         })
     }
+
     return (
         <div className="w-full">
             <div className="fixed w-full opacity-25 top-0 bottom-0 left-0 right-100 h-screen bg-black text-white z-30">

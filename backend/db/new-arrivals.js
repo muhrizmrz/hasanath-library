@@ -4,6 +4,7 @@ const db = require('../config/connection')
 module.exports = {
     addNewArrivals:(book)=>{
         return new Promise((resolve,reject)=>{
+            book.uploadedDate = new Date.now()
             db.get().collection('newArrivals').insertOne(book).then((result)=>{
                 resolve("new arrialss added")
             })

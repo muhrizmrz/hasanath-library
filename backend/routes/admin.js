@@ -11,6 +11,7 @@ const objectId = require('mongodb').ObjectId
 
 const verifyJwt = (req, res, next) => {
     const token = req.headers["x-access-token"]
+    console.log(token)
     if (!token) {
         res.send("you need to create token")
     } else {
@@ -55,9 +56,7 @@ adminRouter.post('/api/login', (req, res) => {
     if (req.body.username == loginDetails.username && req.body.password == loginDetails.password) {
         req.session.username = req.body.username
         const id = req.body.username
-        const token = jwt.sign({ id }, "jwtSecret", {
-            expiresIn: 60,
-        })
+        const token = jwt.sign({ id }, "jwtSecret")
         res.json({ admin: true, token: token })
     } else {
         res.json(false)
@@ -99,6 +98,16 @@ adminRouter.get('/api/get-one-classfication', async (req, res) => {
 adminRouter.post('/api/add-new-arrivals', verifyJwt ,(req, res) => {
     console.log(req.body)
     newArrivals.addNewArrivals(req.body).then((result) => {
+        if(req.files.cover){
+            let image  = req.files.cover
+            image.mv('public/new-arrivals/'+result.insertedId.toString(),(err,done)=>{
+              if(!err){
+                console.log(result)  
+              }else{
+                console.log(err) 
+              }
+            })
+          }
         res.json(result)
     })
 })

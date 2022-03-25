@@ -9,8 +9,12 @@ function IsLoggedAdmin({children}) {
     const navigate = useNavigate()
     const authorizeAdmin = (isAdmin)=>{
         if(isAdmin){
-            axios.get('/admin/api/authorize-admin').then((result) => {
-                if (!result.data) {
+            axios.get('/admin/api/authorize-admin',{
+                headers: {
+                    "x-access-token": localStorage.getItem('token')
+                }
+            }).then((result) => {
+                if (!result.data.admin) {
                     navigate('/admin/login')
                 }
             }) 

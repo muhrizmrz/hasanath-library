@@ -13,12 +13,11 @@ function Login() {
             if (cancel) return;
             if (result.data) {
                 navigate('/admin')
-            }
-        })
         return () => { 
             cancel = true;
         }
     },[])
+    
     function handleLogin(e){
         e.preventDefault()
         const headers = {
@@ -28,8 +27,8 @@ function Login() {
             username: username,
             password: password
         },headers).then((result)=>{
-            console.log(result.data)
             if(result.data){
+                localStorage.setItem("token",result.data.token)
                 navigate('/admin')
                 setLoginError(false)
             }else{

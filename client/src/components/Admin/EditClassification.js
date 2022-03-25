@@ -57,15 +57,20 @@ function EditClassification() {
         }
 
         const headers = {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "x-access-token": localStorage.getItem('token')
         }
         axios.post('/admin/api/edit-classification', {
             classification_number: toBeEdit.classificationNumber,
             classification_name: toBeEdit.classificationName.toLowerCase(),
             _id: toBeDelete
         }, headers).then((response) => {
-            handleLoading(response.data)
-            navigate('/admin/view-classification')
+            if(!response.data.admin){
+                navigate('/admin/login')
+            }else{
+                handleLoading(response.data)
+                navigate('/admin/view-classification')
+            }
         }).catch(function (error) {
             console.log(error);
         });

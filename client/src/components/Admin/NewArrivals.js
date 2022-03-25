@@ -5,6 +5,7 @@ import SuccessfullMsg from './SuccessfullMsg'
 import axios from 'axios'
 import { GrClose } from 'react-icons/gr'
 import { IconContext } from 'react-icons'
+import UploadNewArrivals from './UploadNewArrivals'
 
 function NewArrivals(props) {
     const [IsShowForm, setIsShowForm] = useState(false)
@@ -48,7 +49,7 @@ function NewArrivals(props) {
                     })
                 }
             </div>
-            {IsShowForm && <NewArrivalsForm showForm={setIsShowForm} setSuccess={setSuccess} />}
+            {IsShowForm && <UploadNewArrivals showForm={setIsShowForm} setSuccess={setSuccess} />}
             {IsShowForm && <div onClick={() => setIsShowForm(false)} className="fixed top-12  right-12 z-50">
                 <IconContext.Provider value={{ color: 'white', className: 'bg-white p-2 w-12 h-12 cursor-pointer rounded-full' }}>
                     <GrClose />

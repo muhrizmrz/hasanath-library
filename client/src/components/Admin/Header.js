@@ -9,6 +9,7 @@ function Header(props) {
     const { loadingSearch, setLoadingSearch, setSearchClassificationResult,setSearchText} = useContext(SearchContext)
     const navigate = useNavigate()
     var classificationLink, homeLink
+
     if(props.isAdmin){
         classificationLink = '/admin/view-classification'
         homeLink = '/admin'
@@ -16,6 +17,7 @@ function Header(props) {
         homeLink = '/'
         classificationLink = '/view-classification'
     }
+
     const handleSearch = (e) => {
         setSearchText(keywordForSearchClassification)
         setLoadingSearch(true)
@@ -34,11 +36,22 @@ function Header(props) {
             setSearchClassificationResult(response.data)
         });
     }
+
     const handleLogout = ()=>{
         axios.get('/admin/api/logout').then((result)=>{
             if(result.data){
                 navigate('/')
             }
+        })
+    }
+
+    const authorizeAdmin = ()=>{
+        axios.get('/admin/api/isAdmin',{
+            headers: {
+                "x-access-token": localStorage.getItem('token')
+            }
+        }).then((response)=>{
+            console.log(response)
         })
     }
     return (
@@ -47,7 +60,7 @@ function Header(props) {
                 <header className="w-100 p-4 px-16 bg-white h-auto shadow-lg">
                     <div className="grid grid-cols-4 justify-between place-content-center">
                         <div>
-                            <h1 className="text-lg font-bold">Hasanath Library</h1>
+                            <h1 className="text-lg font-bold" onClick={authorizeAdmin}>Hasanath Library</h1>
                         </div>
                         <form className="col-span-2 flex" onSubmit={(e) => handleSearch(e)}>
                             <input type='text' onChange={(e)=>setKeywordForSearchClassification(e.target.value)} placeholder='Search' className='py-1 px-3 bg-white rounded w-3/4 border border-transparent focus:outline-none ring-2 ring-blue-400 shadow-lg focus:ring-blue-500 text-gray-500' />

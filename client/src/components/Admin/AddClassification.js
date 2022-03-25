@@ -4,6 +4,7 @@ import '../../styles/output.css'
 import ErrorMsg from './ErrorMsg'
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Loader from 'react-loader-spinner'
+import { useNavigate } from 'react-router-dom';
 const axios = require('axios')
 
 function AddClassification() {
@@ -13,6 +14,7 @@ function AddClassification() {
     const [isErrorInAdding, setIsErrorInAdding] = useState()
     const [loading, setLoading] = useState()
     const [errorMsg, setErrorMsg] = useState('')
+    const navigate = useNavigate()
     const handleSubmit = (e) => {
         setIsErrorInAdding(false)
         setLoading(true)
@@ -35,13 +37,18 @@ function AddClassification() {
         }
 
         const headers = {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            "x-access-token": localStorage.getItem('token')
         }
         axios.post('/admin/api/add-classification', {
             classification_number: classificationNumber,
             classification_name: classificationName.toLowerCase()
         }, headers).then((response) => {
-            handleLoading(response.data)
+            if(!response.data.admin){
+                navigate('/admin/login')
+            }else{
+                handleLoading(response.data)
+            }
         }).catch(function (error) {
             console.log(error);
         });

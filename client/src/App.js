@@ -7,7 +7,7 @@ import ViewClassificationPage from './Pages/Admin/ViewClassification';
 import Search from './contexts/searchClassificationContext';
 //import SearchClassification from './Pages/Admin/SearchClassification';
 import SearchClassificationPage from './Pages/Admin/SearchClassification';
-import viewChildClassifications from './contexts/viewChildClassifications';
+import ViewChildClassifications from './contexts/ViewChildClassifications';
 import EditClassificationPage from './Pages/Admin/EditClassification';
 import EditClassificationContext from './contexts/EditClassificationContext';
 import Login from './Pages/Admin/Login';
@@ -19,7 +19,7 @@ function App() {
       <IsLoggedAdmin>
         <Search>
           <EditClassificationContext>
-            <viewChildClassifications>
+            <ViewChildClassifications>
               <Routes>
                 <Route path="/" element={<Home isAdmin={false} />} />
                 <Route path="/admin" element={<Home isAdmin={true} />} />
@@ -31,7 +31,7 @@ function App() {
                 <Route path='/admin/edit-classification' element={<EditClassificationPage isAdmin={true} />} />
                 <Route path='/admin/login' element={<Login />} />
               </Routes>
-            </viewChildClassifications>
+            </ViewChildClassifications>
           </EditClassificationContext>
         </Search>
       </IsLoggedAdmin>

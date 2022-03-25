@@ -15,9 +15,9 @@ function NewArrivals(props) {
         setIsShowForm(true)
     }
     useEffect(() => {
-        axios.get('/admin/api/get-new-arrivals').then((res) => {
+        axios.get('/admin/api/get-new-arrivals').then((res) => {      
             setNewArrivals(res.data)
-        })
+        })     
     },[])
     return (
         <div className="col-span-2">

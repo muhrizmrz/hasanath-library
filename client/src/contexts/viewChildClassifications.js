@@ -2,7 +2,7 @@ import React, { createContext, useState } from 'react'
 
 export const ViewChildClassification = createContext(null)
 
-function viewChildClassifications({children}) {
+function ViewChildClassifications({children}) {
     const [childData, setChildData] = useState(null)
     return (
         <div>
@@ -13,4 +13,4 @@ function viewChildClassifications({children}) {
     )
 }
 
-export default viewChildClassifications
+export default ViewChildClassifications

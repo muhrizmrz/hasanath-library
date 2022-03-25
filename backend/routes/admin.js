@@ -2,12 +2,26 @@ const express = require('express')
 const admin = require('../routeFunctions/admin')
 const app = express()
 const bodyParser = require('body-parser')
+const multer = require('multer')
 const jwt = require('jsonwebtoken')
+
 const adminRouter = express.Router()
 const classificationHelper = require("./../db/classification-helper")
 const newArrivals = require('../db/new-arrivals')
 const db = require('../config/connection')
 const objectId = require('mongodb').ObjectId
+
+
+var storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+    cb(null, 'public')
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '-' +file.originalname )
+  }
+})
+
+var upload = multer({ storage: storage }).single('file')
 
 const verifyJwt = (req, res, next) => {
     const token = req.headers["x-access-token"]
@@ -26,6 +40,7 @@ const verifyJwt = (req, res, next) => {
         })
     }
 }
+
 
 adminRouter.post('/api/add-classification', verifyJwt ,(req, res) => {
     classificationHelper.addClassification(req.body.classification_number, req.body.classification_name).then((result) => {
@@ -95,22 +110,17 @@ adminRouter.get('/api/get-one-classfication', async (req, res) => {
     res.json(classificationDetails)
 })
 
-adminRouter.post('/api/add-new-arrivals', verifyJwt ,(req, res) => {
-    console.log(req.body)
-    newArrivals.addNewArrivals(req.body).then((result) => {
-        if(req.files.cover){
-            let image  = req.files.cover
-            image.mv('public/new-arrivals/'+result.insertedId.toString(),(err,done)=>{
-              if(!err){
-                console.log(result)  
-              }else{
-                console.log(err) 
-              }
-            })
-          }
-        res.json(result)
-    })
-})
+
+adminRouter.post('/api/add-new-arrivals',(req,res)=>{
+    upload(req, res, function (err) {
+        if (err instanceof multer.MulterError) {
+            return res.status(500).json(err)
+        } else if (err) {
+            return res.status(500).json(err)
+        }
+   return res.status(200).send(req.file)
+ })
+
 
 adminRouter.get('/api/get-new-arrivals', (req, res) => {
     newArrivals.getNewArrivals().then((result) => {

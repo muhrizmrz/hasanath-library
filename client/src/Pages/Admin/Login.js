@@ -8,16 +8,16 @@ function Login() {
     const [loginError, setLoginError] = useState(false)
     const navigate = useNavigate()
     useLayoutEffect(()=>{
-        axios.get('/admin/api/authorize-admin',{
-            headers: {
-                "x-access-token": localStorage.getItem('token')
-            }
-        }).then((result) => {
-            if (result.data.admin) {
-              navigate('/admin')
-            }
-          })
+        let cancel = false;
+        axios.get('/admin/api/authorize-admin').then((result) => {
+            if (cancel) return;
+            if (result.data) {
+                navigate('/admin')
+        return () => { 
+            cancel = true;
+        }
     },[])
+    
     function handleLogin(e){
         e.preventDefault()
         const headers = {

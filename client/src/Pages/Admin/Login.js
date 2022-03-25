@@ -8,11 +8,16 @@ function Login() {
     const [loginError, setLoginError] = useState(false)
     const navigate = useNavigate()
     useLayoutEffect(()=>{
+        let cancel = false;
         axios.get('/admin/api/authorize-admin').then((result) => {
+            if (cancel) return;
             if (result.data) {
-              navigate('/admin')
+                navigate('/admin')
             }
-          })
+        })
+        return () => { 
+            cancel = true;
+        }
     },[])
     function handleLogin(e){
         e.preventDefault()

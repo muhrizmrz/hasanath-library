@@ -6,6 +6,7 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const {v4:uuidv4} = require('uuid')
 const session = require('express-session')
+require('dotenv').config()
 var adminRouter = require('./backend/routes/admin');
 var usersRouter = require('./backend/routes/user');
 
@@ -13,7 +14,6 @@ const app = express();
 app.use(express.json())
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(bodyParser.json())
-console.log(__dirname)
 app.use('/public',express.static(path.join(__dirname,'backend/public')))
 app.use(session({secret:uuidv4(),resave:true,saveUninitialized:true}))
 app.use('/admin', adminRouter);

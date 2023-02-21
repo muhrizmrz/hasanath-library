@@ -10,7 +10,7 @@ function EditClassificationPage(props) {
     })
     return (
         <div>
-            <Header isAdmin={props.isAdmin}/>
+            <Header isAdmin={props.isAdmin} handleSearch={props.handleSearch}/>
             <EditClassification isAdmin={props.isAdmin}/>
         </div>
     )

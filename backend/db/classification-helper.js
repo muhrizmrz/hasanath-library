@@ -5,7 +5,9 @@ const objectId = require('mongodb').ObjectId
 
 module.exports = {
     addClassification: (classification_number, classification_name) => {
+        //console.log("add classificatin FUNCTION");
         return new Promise(async (resolve, reject) => {
+            //console.log("add classificatin working");
             const isAvailable = await db.get().collection('classification').findOne({ classificationNumber: Number(classification_number) })
             //console.log(Number(classification_number))
             if (!isAvailable) {
@@ -21,7 +23,7 @@ module.exports = {
                         secondSummary: secondSummary,
                         thirdSummary: thirdSummary,
                         decimalSummary: decimalSummary,
-                        summary: "double decimal summary"
+                        summary: "doubleDecimalSummary"
                     }).then((result) => {
                         console.log("added")
                         resolve("double decimal summary added")
@@ -33,7 +35,7 @@ module.exports = {
                         firstSummary: firstSummary,
                         secondSummary: secondSummary,
                         thirdSummary: thirdSummary,
-                        summary: "decimal summary"
+                        summary: "decimalSummary"
                     }).then((result) => {
                         resolve("decimal summary added")
                     })
@@ -42,7 +44,7 @@ module.exports = {
                         db.get().collection('classification').insertOne({
                             classificationNumber: classification_number,
                             classificationName: classification_name,
-                            summary: "first summary"
+                            summary: "firstSummary"
                         }).then((result) => {
                             resolve("first summary added")
                         })
@@ -51,7 +53,7 @@ module.exports = {
                             classificationNumber: classification_number,
                             classificationName: classification_name,
                             firstSummary: firstSummary,
-                            summary: "second summary"
+                            summary: "secondSummary"
                         }).then((result) => {
                             resolve("second summary added")
                         })
@@ -61,7 +63,7 @@ module.exports = {
                             classificationName: classification_name,
                             firstSummary: firstSummary,
                             secondSummary: secondSummary,
-                            summary: "third summary"
+                            summary: "thirdSummary"
                         }).then((result) => {
                             resolve("third summary added")
                         })

@@ -11,7 +11,7 @@ function ClassificationList(props) {
     }, [])
     return (
         <div>
-            <Header isAdmin={props.isAdmin} />
+            <Header isAdmin={props.isAdmin} handleSearch={props.handleSearch} />
             <AddClassification />
         </div>
     )

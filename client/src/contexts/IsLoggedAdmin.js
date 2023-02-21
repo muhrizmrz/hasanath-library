@@ -14,6 +14,7 @@ function IsLoggedAdmin({children}) {
                     "x-access-token": localStorage.getItem('token')
                 }
             }).then((result) => {
+                
                 if (!result.data.admin) {
                     navigate('/admin/login')
                 }

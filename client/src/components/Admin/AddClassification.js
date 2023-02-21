@@ -15,6 +15,7 @@ function AddClassification() {
     const [loading, setLoading] = useState()
     const [errorMsg, setErrorMsg] = useState('')
     const navigate = useNavigate()
+    
     const handleSubmit = (e) => {
         setIsErrorInAdding(false)
         setLoading(true)
@@ -43,9 +44,13 @@ function AddClassification() {
         axios.post('/admin/api/add-classification', {
             classification_number: classificationNumber,
             classification_name: classificationName.toLowerCase()
-        }, headers).then((response) => {
+        }, {
+            headers: {
+            "Content-Type": "application/json",
+            "x-access-token": localStorage.getItem('token')
+        }}).then((response) => {
             if(!response.data.admin){
-                navigate('/admin/login')
+                navigate('/admin')
             }else{
                 handleLoading(response.data)
             }

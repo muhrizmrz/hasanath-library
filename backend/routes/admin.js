@@ -25,7 +25,6 @@ var upload = multer({ storage: storage }).single('file')
 
 const verifyJwt = (req, res, next) => {
     const token = req.headers["x-access-token"]
-    console.log(token)
     if (!token) {
         res.send("you need to create token")
     } else {
@@ -73,6 +72,7 @@ adminRouter.post('/api/login', (req, res) => {
         const id = req.body.username
         const token = jwt.sign({ id }, "jwtSecret")
         res.json({ admin: true, token: token })
+        console.log(token)
     } else {
         res.json(false)
     }
@@ -120,7 +120,7 @@ adminRouter.post('/api/add-new-arrivals',(req,res)=>{
         }
    return res.status(200).send(req.file)
  })
-
+})
 
 adminRouter.get('/api/get-new-arrivals', (req, res) => {
     newArrivals.getNewArrivals().then((result) => {
@@ -146,4 +146,5 @@ adminRouter.get('/api/get-child-classifications', (req, res) => {
         res.send(result)
     })
 })
+
 module.exports = adminRouter

@@ -1,0 +1,159 @@
+[{
+  "_id": {
+    "$oid": "63de48418fddd8989b17f1f8"
+  },
+  "classificationNumber": "210",
+  "classificationName": "islam",
+  "firstSummary": "200",
+  "summary": "second summary"
+},{
+  "_id": {
+    "$oid": "63de4cd717f98b2a5b6fc86b"
+  },
+  "classificationNumber": "000",
+  "classificationName": "computer science, information & general works",
+  "summary": "first summary"
+},{
+  "_id": {
+    "$oid": "63de4cef17f98b2a5b6fc86c"
+  },
+  "classificationNumber": "100",
+  "classificationName": "philosophy & psychology",
+  "summary": "first summary"
+},{
+  "_id": {
+    "$oid": "63de4cfa17f98b2a5b6fc86d"
+  },
+  "classificationNumber": "200",
+  "classificationName": "religion",
+  "summary": "first summary"
+},{
+  "_id": {
+    "$oid": "63de4d4817f98b2a5b6fc86e"
+  },
+  "classificationNumber": "300",
+  "classificationName": "social sciences",
+  "summary": "first summary"
+},{
+  "_id": {
+    "$oid": "63de4d6317f98b2a5b6fc86f"
+  },
+  "classificationNumber": "400",
+  "classificationName": "language",
+  "summary": "first summary"
+},{
+  "_id": {
+    "$oid": "63de4d6d17f98b2a5b6fc870"
+  },
+  "classificationNumber": "500",
+  "classificationName": "science",
+  "summary": "first summary"
+},{
+  "_id": {
+    "$oid": "63de4d7617f98b2a5b6fc871"
+  },
+  "classificationNumber": "600",
+  "classificationName": "technology",
+  "summary": "first summary"
+},{
+  "_id": {
+    "$oid": "63de4d8117f98b2a5b6fc872"
+  },
+  "classificationNumber": "700",
+  "classificationName": "arts & recreation",
+  "summary": "first summary"
+},{
+  "_id": {
+    "$oid": "63de4d8b17f98b2a5b6fc873"
+  },
+  "classificationNumber": "800",
+  "classificationName": "literature",
+  "summary": "first summary"
+},{
+  "_id": {
+    "$oid": "63de4d9617f98b2a5b6fc874"
+  },
+  "classificationNumber": "900",
+  "classificationName": "history & geography",
+  "summary": "first summary"
+},{
+  "_id": {
+    "$oid": "63de8850c280a06f83760283"
+  },
+  "classificationNumber": "010",
+  "classificationName": "general bibilographies",
+  "firstSummary": "000",
+  "summary": "second summary"
+},{
+  "_id": {
+    "$oid": "63de8859c280a06f83760284"
+  },
+  "classificationNumber": "020",
+  "classificationName": "library & information sc",
+  "firstSummary": "000",
+  "summary": "second summary"
+},{
+  "_id": {
+    "$oid": "63de8865c280a06f83760285"
+  },
+  "classificationNumber": "030",
+  "classificationName": "general encyclopaedias",
+  "firstSummary": "000",
+  "summary": "second summary"
+},{
+  "_id": {
+    "$oid": "63de8870c280a06f83760286"
+  },
+  "classificationNumber": "050",
+  "classificationName": "periodicals/serials ",
+  "firstSummary": "000",
+  "summary": "second summary"
+},{
+  "_id": {
+    "$oid": "63de887dc280a06f83760287"
+  },
+  "classificationNumber": "060",
+  "classificationName": "general organizations ",
+  "firstSummary": "000",
+  "summary": "second summary"
+},{
+  "_id": {
+    "$oid": "63de8886c280a06f83760288"
+  },
+  "classificationNumber": "070",
+  "classificationName": "journalism ",
+  "firstSummary": "000",
+  "summary": "second summary"
+},{
+  "_id": {
+    "$oid": "63de888ec280a06f83760289"
+  },
+  "classificationNumber": "080",
+  "classificationName": "general collections",
+  "firstSummary": "000",
+  "summary": "second summary"
+},{
+  "_id": {
+    "$oid": "63de889bc280a06f8376028a"
+  },
+  "classificationNumber": "080",
+  "classificationName": "manuscripts ",
+  "firstSummary": "000",
+  "summary": "second summary"
+},{
+  "_id": {
+    "$oid": "63de88a7c280a06f8376028b"
+  },
+  "classificationNumber": "110",
+  "classificationName": "metaphysics ",
+  "firstSummary": "100",
+  "summary": "second summary"
+},{
+  "_id": {
+    "$oid": "63de88afc280a06f8376028c"
+  },
+  "classificationNumber": "120",
+  "classificationName": "epistemology ",
+  "firstSummary": "100",
+  "summary": "second summary"
+}]

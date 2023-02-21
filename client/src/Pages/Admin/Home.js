@@ -12,11 +12,11 @@ function Home(props) {
     }, [])
     return (
         <div className="bg-gray-100 h-auto">
-            <Header isAdmin={props.isAdmin}/>
+            <Header isAdmin={props.isAdmin} handleSearch={props.handleSearch}/>
             <div className='pt-24 w-full grid grid-cols-3 p-10'>
                 <NewArrivals isAdmin={props.isAdmin}/>
                 <div>
-                    <DdcClassification isAdmin={props.isAdmin}/>
+                    <DdcClassification isAdmin={props.isAdmin} data={props.data}/>
                     <LibraryDuty/>
                 </div>
             </div>
